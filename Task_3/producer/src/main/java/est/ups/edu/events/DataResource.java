@@ -23,8 +23,8 @@ public class DataResource {
     @Path("/send")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public CompletionStage<Response> sendMessage(String message) {
-        return producer.sendMessage(message)
+    public CompletionStage<Response> sendMessage(Student student) {
+        return producer.sendMessage(student)
                 .thenApply(unused -> Response.accepted().build());
     }
 }

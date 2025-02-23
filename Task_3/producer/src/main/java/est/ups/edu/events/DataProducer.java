@@ -4,7 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
-
+import io.smallrye.reactive.messaging.kafka.Record;
 
 
 import java.util.concurrent.CompletionStage;
@@ -14,9 +14,9 @@ public class DataProducer {
 
     @Inject
     @Channel("data-output")
-    Emitter<String> emitter;
+    Emitter<Record<Integer, String>> emitter;
 
-    public CompletionStage<Void> sendMessage(String message) {
-        return emitter.send(message);
+    public CompletionStage<Void> sendMessage(Student student) {
+        return emitter.send(Record.of(student.semestre, student.carrera));
     }
 }
