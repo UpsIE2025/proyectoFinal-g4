@@ -1,8 +1,25 @@
 package est.ups.edu.events;
 
+
+import lombok.*;
+
+@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Student {
 
-    public String carrera;
-    public int semestre;
+    private Integer id;
+
+    private String nombre;
+
+    private String apellido;
+
+    private String carrera;
+
+    private int semestre;
+
+
 
 }
