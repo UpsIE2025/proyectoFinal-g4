@@ -1,9 +1,9 @@
 
 # Pasos previos
 
-## 1. Instala docker-compose.yml.
-## 2. Valida que en la ruta exista el servicio msc-productor
-## 3. Ejecutar docker-compose up -d
+ 1. Instala docker-compose.yml.
+ 2. Valida que en la ruta exista el servicio msc-productor
+ 3. Ejecutar docker-compose up -d
 
 
 # Sección para crear y configurar un servicio en Kong
