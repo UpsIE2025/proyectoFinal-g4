@@ -1,0 +1,98 @@
+services:
+  kong-database:
+    image: postgres:13
+    container_name: kong-database
+    restart: always
+    environment:
+      POSTGRES_USER: kong
+      POSTGRES_PASSWORD: kong
+      POSTGRES_DB: kong
+    ports:
+      - "5432:5432"
+    networks:
+      - kong-net
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "kong"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+
+  kong-migrations:
+    image: kong:latest
+    entrypoint: /bin/sh -c "kong migrations bootstrap && kong reload"
+    container_name: kong-migrations
+    depends_on:
+      kong-database:
+        condition: service_healthy
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: kong
+    networks:
+      - kong-net
+
+  kong:
+    image: kong:latest
+    container_name: kong
+    restart: always
+    depends_on:
+      kong-database:
+        condition: service_healthy
+      kong-migrations:
+        condition: service_started
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: kong
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
+      # Habilitar Kong Manager
+      KONG_ADMIN_GUI_HOST: 0.0.0.0  # Permitir acceso desde cualquier IP
+      KONG_ADMIN_GUI_PORT: 8002    # Puerto para la interfaz de Kong Manager
+    ports:
+      - "8000:8000"
+      - "8443:8443"
+      - "8001:8001"
+      - "8444:8444"
+      - "8002:8002"  # Exponer el puerto de la GUI
+    volumes:
+      - kong-data:/usr/local/kong
+    networks:
+      - kong-net
+
+  redis:
+    image: redis:latest
+    container_name: redis-container
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - kong-net
+
+  msc-productor:
+    build: ./msc-productor
+    container_name: msc-productor
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+    environment:
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+    networks:
+      - kong-net
+
+
+volumes:
+  kong-data:
+
+networks:
+  kong-net:
+    driver: bridge
