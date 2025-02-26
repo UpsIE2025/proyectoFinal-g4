@@ -18,8 +18,8 @@ curl --location 'http://localhost:8001/services/' \
 --data-urlencode 'name=msc-productor-service' \
 --data-urlencode 'url=http://msc-productor:8080'    
 
-URL de destino: http://msc-productor:8080 es la URL de nuestro servicio backend.
-Nombre del servicio: msc-productor-service es el nombre que asignamos a este servicio.
+- URL de destino: http://msc-productor:8080 es la URL de nuestro servicio backend.
+- Nombre del servicio: msc-productor-service es el nombre que asignamos a este servicio.
 
 
 
@@ -32,7 +32,7 @@ curl --location 'http://localhost:8001/services/msc-productor-service/routes' \
 --header 'Content-Type: application/x-www-form-urlencoded' \
 --data-urlencode 'paths%5B%5D=/redis/guardar'
 
-Ruta definida: /redis/guardar es el endpoint que se utilizará para acceder al servicio.
+- Ruta definida: /redis/guardar es el endpoint que se utilizará para acceder al servicio.
 
 
 ## 3. Desactivar strip_path
