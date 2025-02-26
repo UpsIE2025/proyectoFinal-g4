@@ -25,7 +25,7 @@ Nombre del servicio: msc-productor-service es el nombre que asignamos a este ser
 
 
 
-## 2. Crear una ruta para el servicio
+2. Crear una ruta para el servicio
 
 A continuación, creamos una ruta que se usará para enrutar las solicitudes a nuestro servicio.
 
@@ -37,7 +37,7 @@ curl --location 'http://localhost:8001/services/msc-productor-service/routes' \
 Ruta definida: /redis/guardar es el endpoint que se utilizará para acceder al servicio.
 
 
-## 3. Desactivar strip_path
+3. Desactivar strip_path
 
 Por defecto, Kong elimina (con `strip_path: true`) la parte de la URL definida en `paths[]` antes de enviar la solicitud al backend. Esto puede causar problemas si el backend no está configurado para manejar solicitudes sin esa parte de la ruta.
 
@@ -49,7 +49,7 @@ curl --location --request PATCH 'http://localhost:8001/routes/37a1f035-3010-426c
 --data-urlencode 'strip_path=false'
 
 
-## 4. Instalar el plugin de autenticación
+4. Instalar el plugin de autenticación
 Para agregar seguridad al servicio, instalamos el plugin de autenticación basado en clave API.
 ```bash
 curl --location 'http://localhost:8001/services/msc-productor-service/plugins' \
