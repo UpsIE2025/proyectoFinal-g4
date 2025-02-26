@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+service MessageService {
+  rpc SendMessage(MessageRequest) returns (Empty);
+  rpc ReceiveMessages(Empty) returns (stream MessageResponse);
+}
+
+message MessageRequest {
+  string messagecom = 1;
+}
+
+message MessageResponse {
+  string messagecom = 1;
+}
+
+message Empty {}
+
