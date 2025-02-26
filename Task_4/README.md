@@ -61,7 +61,8 @@ Ahora, debemos crear un consumidor que será el usuario que autentique las solic
 curl --location 'http://localhost:8001/consumers' \
 --header 'Content-Type: application/x-www-form-urlencoded' \
 --data-urlencode 'username=upsadmin'
-•	Nombre del consumidor: upsadmin es el nombre del consumidor.
+
+- Nombre del consumidor: upsadmin es el nombre del consumidor.
 
 
 ## 6. Probar la funcionalidad del servicio con el token generado
@@ -69,5 +70,6 @@ Una vez configurado todo, probamos el servicio enviando una solicitud con el tok
 
 curl --location --request POST 'http://localhost:8000/redis/guardar?clave=mensaje&valor=HolaFunciona' \
 --header 'apikey: 4pfeJNKHGqd00v6kLNpMKVSqqRqlTvQB'
-•	URL de prueba: http://localhost:8000/redis/guardar?clave=mensaje&valor=HolaFunciona es la URL a la que se enviará la solicitud.
-•	Token de API: 4pfeJNKHGqd00v6kLNpMKVSqqRqlTvQB es el token generado para autenticar la solicitud.
+
+- URL de prueba: http://localhost:8000/redis/guardar?clave=mensaje&valor=HolaFunciona es la URL a la que se enviará la solicitud.
+- Token de API: 4pfeJNKHGqd00v6kLNpMKVSqqRqlTvQB es el token generado para autenticar la solicitud.
