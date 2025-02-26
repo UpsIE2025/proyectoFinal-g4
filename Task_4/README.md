@@ -12,12 +12,12 @@ Este documento explica los pasos necesarios para crear un servicio en Kong, conf
 ## 1. Crear un servicio en Kong
 
 Primero, debemos crear un servicio que apunte a nuestro backend.
-
+```bash
 curl --location 'http://localhost:8001/services/' \
 --header 'Content-Type: application/x-www-form-urlencoded' \
 --data-urlencode 'name=msc-productor-service' \
 --data-urlencode 'url=http://msc-productor:8080'    
-
+```
 - URL de destino: http://msc-productor:8080 es la URL de nuestro servicio backend.
 - Nombre del servicio: msc-productor-service es el nombre que asignamos a este servicio.
 
@@ -65,11 +65,16 @@ curl --location 'http://localhost:8001/consumers' \
 - Nombre del consumidor: upsadmin es el nombre del consumidor.
 
 
+## 7. Generamos el key 
+```bash
+curl --location --request POST 'http://localhost:8001/consumers/upsadmin/key-auth'
+```
+
 ## 6. Probar la funcionalidad del servicio con el token generado
 Una vez configurado todo, probamos el servicio enviando una solicitud con el token de autenticación.
 ```bash
 curl --location --request POST 'http://localhost:8000/redis/guardar?clave=mensaje&valor=HolaFunciona' \
---header 'apikey: 4pfeJNKHGqd00v6kLNpMKVSqqRqlTvQB'
+--header 'apikey: keygenerado'
 ```
 - URL de prueba: http://localhost:8000/redis/guardar?clave=mensaje&valor=HolaFunciona es la URL a la que se enviará la solicitud.
-- Token de API: 4pfeJNKHGqd00v6kLNpMKVSqqRqlTvQB es el token generado para autenticar la solicitud.
+- Token de API: Es el token generado para autenticar la solicitud.
