@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"semestre\": 1,\n    \"carrera\": \"Contabilidad\"\n}",
+					"raw": "{\n    \"id\": 1,\n    \"nombre\": \"carlos\",\n    \"apellido\": \"reimon\",\n    \"carrera\": \"Ambiental\",\n    \"semestre\": 1\n}",
 					"options": {
 						"raw": {
 							"language": "json"
