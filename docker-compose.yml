@@ -4,6 +4,8 @@ services:
     container_name: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+      - integration-network
 
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -24,3 +26,10 @@ services:
       kafka-topics --create --if-not-exists --topic grupo4-topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1 &&
       wait
       "
+    networks:
+      - integration-network
+      
+      
+networks:
+  integration-network:
+    driver: bridge
