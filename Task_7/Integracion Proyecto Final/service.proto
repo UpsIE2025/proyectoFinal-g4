@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+service MicroService {
+  rpc saveStudent (StudentRequest) returns (Response);
+}
+
+message StudentRequest {
+  string nombre = 1;
+  string apellido = 2;
+  string correo = 3;
+  string fecha_nacimiento = 4;
+  string carrera = 5;
+  int32 semestre = 6;
+}
+
+message Response {
+  bool success = 1;
+}
