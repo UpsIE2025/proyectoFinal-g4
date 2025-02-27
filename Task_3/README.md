@@ -1,3 +1,40 @@
+# Integración con Apache Kafka
+
+## 1. Introducción
+Apache Kafka es una plataforma de mensajería distribuida orientada a eventos. Permite la ingesta, almacenamiento y procesamiento de grandes volúmenes de datos en tiempo real con alta disponibilidad y tolerancia a fallos. Su arquitectura basada en logs distribuidos lo hace ideal para sistemas de streaming de datos.
+
+## 2. Arquitectura y Componentes Clave
+Kafka se compone de los siguientes elementos:
+
+### 2.1 Producer
+Los productores son aplicaciones que envían mensajes a Kafka. Publican datos en "topics" específicos para ser consumidos por los consumidores.
+
+### 2.2 Broker
+Los brokers son los servidores que almacenan los datos y gestionan la distribución de mensajes. Un clúster de Kafka suele tener múltiples brokers para garantizar alta disponibilidad.
+
+### 2.3 Consumer
+Los consumidores leen datos de los topics. Pueden suscribirse a un topic y procesar los mensajes en tiempo real o en lotes.
+
+### 2.4 Topic y Partitions
+- **Topic**: Categoría donde se publican los mensajes.
+- **Partition**: Los topics pueden dividirse en particiones para paralelizar la lectura y escritura, mejorando el rendimiento y la escalabilidad.
+
+## 3. Casos de Uso en Integración Empresarial
+Kafka es ampliamente utilizado en distintos escenarios empresariales:
+- **Procesamiento de datos en tiempo real**: Seguimiento de eventos en plataformas de comercio electrónico.
+- **Microservicios**: Comunicación asincrónica entre servicios.
+- **Monitorización y logging**: Agregación de logs de diferentes sistemas para análisis.
+
+## 4. Comparación con Otras Tecnologías de Mensajería
+| Característica  | Apache Kafka | RabbitMQ |
+|-----------------|-------------|----------|
+| Modelo | Basado en logs distribuidos | Basado en colas |
+| Enfoque | Streaming de eventos | Mensajería tradicional |
+| Persistencia | Alto rendimiento y retención prolongada | Menor retención de mensajes |
+| Escalabilidad | Alta, basada en particiones | Limitada por colas |
+| Casos de uso | Análisis de datos, Big Data | Comunicación entre microservicios |
+
+
 # Configuración y Ejecución del Proyecto Kafka con Quarkus
 
 Este documento describe los pasos necesarios para configurar y ejecutar un entorno basado en Apache Kafka y Quarkus, incluyendo un productor y un consumidor.
