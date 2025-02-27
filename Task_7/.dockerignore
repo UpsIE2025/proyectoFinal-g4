@@ -1,0 +1,19 @@
+# Ignorar dependencias de Node.js (se instalan dentro del contenedor)
+node_modules
+npm-debug.log
+package-lock.json
+
+# Ignorar archivos de configuración locales
+.env
+.DS_Store
+.idea
+.vscode
+.eslintcache
+
+# Ignorar carpetas de compilación
+dist
+coverage
+
+# Ignorar Git
+.git
+.gitignore
