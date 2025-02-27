@@ -33,7 +33,7 @@ class LoginPage extends StatelessWidget {
 
   Widget _textAppName() {
     return Text(
-      'DELIVERY MYSQL',
+      'Chasky',
       style: TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.bold,
@@ -157,7 +157,11 @@ class LoginPage extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(top: 20, bottom: 15),
         alignment: Alignment.center,
-        child: Image.asset('assets/img/delivery.png', width: 130, height: 130),
+        child: Image.asset(
+          'assets/img/estudiante.png',
+          width: 130,
+          height: 130,
+        ),
       ),
     );
   }

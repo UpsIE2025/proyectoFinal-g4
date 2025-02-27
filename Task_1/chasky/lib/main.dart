@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
     print('Usuario id: ${userSession.id}');
 
     return GetMaterialApp(
-      title: 'Delivery Udemy',
+      title: 'Chasky',
       debugShowCheckedModeBanner: false,
       initialRoute: userSession.id != null ? '/home' : '/',
       getPages: [
