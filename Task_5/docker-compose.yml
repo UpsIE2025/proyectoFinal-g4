@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: debezium
+      MARIADB_DATABASE: change_data_capture
+      MARIADB_USER: mariauser
+      MARIADB_PASSWORD: mariapw
+    ports:
+      - "3307:3306"
+    volumes:
+      - "./mariadb_init.sql:/docker-entrypoint-initdb.d/1.sql"
+    networks:
+      - cdc_network
+
+  postgres:
+    image: quay.io/debezium/postgres:15
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: change_data_capture
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5433:5432"
+    volumes:
+      - "./postgresql.conf:/etc/postgresql/postgresql.conf"
+      - "./postgres_init.sql:/docker-entrypoint-initdb.d/10-init.sql"
+    networks:
+      - cdc_network
+
+  zookeeper:
+    image: quay.io/debezium/zookeeper:2.7
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+      - "3888:3888"
+    networks:
+      - cdc_network
+
+  kafka:
+    image: quay.io/debezium/kafka:2.7
+    ports:
+      - "9092:9092"
+    environment:
+      - ZOOKEEPER_CONNECT=zookeeper:2181
+    depends_on:
+      - zookeeper
+    healthcheck:
+      test: ["CMD-SHELL", "/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --list"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - cdc_network
+
+  connect:
+    image: quay.io/debezium/connect:2.7
+    ports:
+      - "8083:8083"
+    environment:
+      - BOOTSTRAP_SERVERS=kafka:9092
+      - GROUP_ID=1
+      - CONFIG_STORAGE_TOPIC=my_connect_configs
+      - OFFSET_STORAGE_TOPIC=my_connect_offsets
+      - STATUS_STORAGE_TOPIC=my_connect_statuses
+      - CONNECT_REST_ADVERTISED_HOST_NAME=connect
+    depends_on:
+      - kafka
+    networks:
+      - cdc_network
+
+  microservice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      kafka:
+        condition: service_healthy
+    networks:
+      - cdc_network
+
+volumes:
+  mariadb_data:
+  postgres_data:
+
+networks:
+  cdc_network:
