@@ -1,0 +1,49 @@
+{
+	"info": {
+		"_postman_id": "effa50b4-18f0-44e1-8cf9-57093322866c",
+		"name": "KongGateway",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "37366305"
+	},
+	"item": [
+		{
+			"name": "KongGateway",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "apikey",
+						"value": "QcYeetZF2I73Vsjepu4aOp17uutfAx3Z",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"query\": \"query { saveStudent(input: { id: 1, nombre: \\\"Juan\\\", apellido: \\\"Pérez\\\", carrera: \\\"Ingeniería en mecanica\\\", semestre: 2 }) { message status } }\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8000/graphql"
+			},
+			"response": []
+		},
+		{
+			"name": "ApiKeyGenerate",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": "http://localhost:8001/consumers/upsadmin/key-auth"
+			},
+			"response": []
+		}
+	]
+}
