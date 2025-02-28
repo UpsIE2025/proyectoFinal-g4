@@ -81,11 +81,13 @@ services:
       - .env
     environment:
       - PYTHONUNBUFFERED=1
+      - KAFKA_URL=kafka:9092
     depends_on:
       kafka:
         condition: service_healthy
     networks:
       - cdc_network
+
 
 volumes:
   mariadb_data:

@@ -1,4 +1,5 @@
 import json
+import os
 import threading
 from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
@@ -11,11 +12,12 @@ from app.repository import save_student, delete_student_id
 
 
 def consume_kafka():
+    kafka_url = os.environ.get('KAFKA_URL')
     topic = "dbserver1.public.estudiantes"
     try:
         consumer = KafkaConsumer(
             topic,
-            bootstrap_servers="kafka:9092",
+            bootstrap_servers=kafka_url,
             auto_offset_reset="earliest",
             enable_auto_commit=True,
             group_id="mi-grupo-id",
