@@ -67,6 +67,24 @@ services:
     environment:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092 # Pasa la configuración correcta de Kafka
 
+  graphql:
+    build:
+      context: ./Task_7/Integracion_Proyecto_Final
+      dockerfile: Dockerfile
+    container_name: graphql_server
+    restart: always
+    ports:
+      - "4000:4000"
+    networks:
+      - integration-network
+    environment:
+      - NODE_ENV=production
+      - JWT_SECRET=mi_super_secreto
+      - REST_SERVICE_URL=http://producer_app:8080/kafka/send
+      - GRPC_SERVICE_HOST=grpc-service:50051
+    depends_on:
+      - producer
+
 networks:
   integration-network:
     driver: bridge
