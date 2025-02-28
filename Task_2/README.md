@@ -1,80 +1,88 @@
+# Kong Gateway - Guía de Instalación y Configuración
 
-# Pasos previos
+Este documento proporciona instrucciones sobre cómo instalar y configurar Kong Gateway usando Docker Compose, basándose en los archivos `docker-compose.yml` y `setup_kong.sh` proporcionados.
 
- 1. Instala docker-compose.yml.
- 2. Valida que en la ruta exista el servicio msc-productor
- 3. Ejecutar docker-compose up -d
+## Requisitos Previos
 
+*   Docker: Asegúrate de que Docker esté instalado en tu sistema. Puedes descargarlo desde el [sitio web oficial de Docker](https://www.docker.com/get-started).
+*   Docker Compose: Asegúrate de que Docker Compose también esté instalado. A menudo viene incluido con Docker Desktop. Si no, puedes instalarlo por separado desde la [documentación de Docker](https://docs.docker.com/compose/install/).
+*   Una comprensión básica de Docker y Docker Compose.
 
-# Sección para crear y configurar un servicio en Kong
-Este documento explica los pasos necesarios para crear un servicio en Kong, configurar rutas, instalar un plugin de autenticación y probar la funcionalidad del servicio.
+## Pasos de Instalación
 
-## 1. Crear un servicio en Kong
+1.  **Clona el Repositorio (o Crea los Archivos Necesarios):**
 
-Primero, debemos crear un servicio que apunte a nuestro backend.
-```bash
-curl --location 'http://localhost:8001/services/' \
---header 'Content-Type: application/x-www-form-urlencoded' \
---data-urlencode 'name=msc-productor-service' \
---data-urlencode 'url=http://msc-productor:8080'    
-```
-- URL de destino: http://msc-productor:8080 es la URL de nuestro servicio backend.
-- Nombre del servicio: msc-productor-service es el nombre que asignamos a este servicio.
+    Si tienes un repositorio con los archivos `docker-compose.yml` y `setup_kong.sh`, clónalo. De lo contrario, crea estos archivos en un directorio en tu sistema.
 
+    ```bash
+    # Ejemplo asumiendo que tienes un repositorio
+    git clone <url_de_tu_repositorio>
+    cd <directorio_de_tu_repositorio>
+    ```
 
+2.  **Crea el Script `setup_kong.sh`:**
 
-## 2. Crear una ruta para el servicio
+    Crea un archivo llamado `setup_kong.sh` en el mismo directorio que tu archivo `docker-compose.yml`.
 
-A continuación, creamos una ruta que se usará para enrutar las solicitudes a nuestro servicio.
+3.  **Crea el Archivo `docker-compose.yml`:**
 
-```bash
-curl --location 'http://localhost:8001/services/msc-productor-service/routes' \
---header 'Content-Type: application/x-www-form-urlencoded' \
---data-urlencode 'paths%5B%5D=/redis/guardar'
-```
-- Ruta definida: /redis/guardar es el endpoint que se utilizará para acceder al servicio.
+    Crea un archivo llamado `docker-compose.yml` en el mismo directorio que tu archivo `setup_kong.sh`. 
 
+4.  **Inicia la Pila de Kong:**
 
-## 3. Desactivar strip_path
+    Abre tu terminal, navega al directorio que contiene el archivo `docker-compose.yml` y ejecuta el siguiente comando:
 
-Por defecto, Kong elimina (con `strip_path: true`) la parte de la URL definida en `paths[]` antes de enviar la solicitud al backend. Esto puede causar problemas si el backend no está configurado para manejar solicitudes sin esa parte de la ruta.
+    ```bash
+    docker-compose up -d
+    ```
 
-Para resolver esto, cambiamos `strip_path` a `false`.
+    Este comando iniciará la pila de Kong Gateway en modo desasociado (en segundo plano).
 
-```bash
-curl --location --request PATCH 'http://localhost:8001/routes/37a1f035-3010-426c-af84-64ba9ae9d98d' \
---header 'Content-Type: application/x-www-form-urlencoded' \
---data-urlencode 'strip_path=false'
-```
+5.  **Verifica la Instalación:**
 
-## 4. Instalar el plugin de autenticación
-Para agregar seguridad al servicio, instalamos el plugin de autenticación basado en clave API.
-```bash
-curl --location 'http://localhost:8001/services/msc-productor-service/plugins' \
---header 'Content-Type: application/x-www-form-urlencoded' \
---data-urlencode 'name=key-auth'
-```
+    Después de que los contenedores estén en ejecución, puedes verificar la instalación accediendo a las siguientes URLs en tu navegador:
 
-## 5. Crear un consumidor
-Ahora, debemos crear un consumidor que será el usuario que autentique las solicitudes a nuestro servicio.
-```bash
-curl --location 'http://localhost:8001/consumers' \
---header 'Content-Type: application/x-www-form-urlencoded' \
---data-urlencode 'username=upsadmin'
-```
-- Nombre del consumidor: upsadmin es el nombre del consumidor.
+    *   **Kong Admin API:** `http://localhost:8001` (o `https://localhost:8444` para SSL)
+    *   **Kong Admin UI:** `http://localhost:8002`
+    *   **Kong Proxy:** `http://localhost:8000` (o `https://localhost:8443` para SSL)
 
+    También puedes verificar los logs de los contenedores en busca de errores:
 
-## 7. Generamos el key 
-```bash
-curl --location --request POST 'http://localhost:8001/consumers/upsadmin/key-auth'
-```
+    ```bash
+    docker-compose logs -f
+    ```
 
-## 6. Probar la funcionalidad del servicio con el token generado
-Una vez configurado todo, probamos el servicio enviando una solicitud con el token de autenticación.
-```bash
-curl --location --request POST 'http://localhost:8000/redis/guardar?clave=mensaje&valor=HolaFunciona' \
---header 'apikey: keygenerado'
-```
-- URL de prueba: http://localhost:8000/redis/guardar?clave=mensaje&valor=HolaFunciona es la URL a la que se enviará la solicitud.
-- Token de API: Es el token generado para autenticar la solicitud.
+## Configuración
+
+El script `setup_kong.sh` configura automáticamente lo siguiente:
+
+*   **Consumidor:** Crea un consumidor con el nombre de usuario `upsadmin`.
+*   **Servicio GraphQL:** Crea un servicio llamado `graphql-service` que apunta a `http://graphql_server:4000`. **Importante:** Necesitarás un servidor GraphQL ejecutándose en esta dirección (o ajustar la URL en el script `setup_kong.sh` en consecuencia). Si no tienes uno, recibirás errores cuando Kong intente hacer proxy a él.
+*   **Ruta GraphQL:** Crea una ruta para el `graphql-service` que escucha en la ruta `/graphql`.
+*   **Plugin de Autenticación por Clave (Key Auth):** Habilita el plugin `key-auth` para el `graphql-service`. Esto requiere que los clientes proporcionen una clave API para acceder al endpoint GraphQL.  Por defecto, Kong buscará la clave en la cabecera `apikey` o como un parámetro.
+*   **Plugin CORS:** Habilita el plugin `cors` para el `graphql-service` para permitir solicitudes entre orígenes (cross-origin).
+*   **Autenticación por Clave API:** El plugin `key-auth` está habilitado. Necesitarás crear una clave para el consumidor `upsadmin` para acceder al endpoint GraphQL. Puedes hacer esto usando la API de administración de Kong:
+
+    ```bash
+    curl -X POST http://localhost:8001/consumers/upsadmin/key-auth
+    ```
+
+    Esto devolverá una respuesta JSON que contiene la clave API generada. Incluye esta clave en la cabecera `apikey` o en el parámetro de consulta de tus solicitudes al endpoint `/graphql` (por ejemplo, `curl -H "apikey: <tu_clave_api>" http://localhost:8000/graphql`).
+
+*   **Personalización:** Puedes personalizar la configuración aún más modificando el script `setup_kong.sh`. Por ejemplo, puedes agregar más consumidores, servicios, rutas o plugins.
+
+*   **Persistencia de Postgres:** El volumen `kong-data` asegura que los datos de configuración de Kong se persistan incluso si se reinicia el contenedor de Kong. Si quieres comenzar con una instancia de Kong nueva, puedes eliminar este volumen.
+
+*   **Comprobaciones de Salud (Health Checks):** Las secciones `healthcheck` en el archivo `docker-compose.yml` aseguran que los contenedores estén saludables antes de que se consideren listos. Esto ayuda a prevenir problemas con Kong Gateway.
+
+## Resolución de Problemas
+
+*   **Problemas al Iniciar los Contenedores:** Si los contenedores no se inician, revisa los logs en busca de errores. Los problemas comunes incluyen problemas de conexión a la base de datos o errores de configuración de red.
+*   **Acceso a la API de Administración de Kong:** Si no puedes acceder a la API de administración de Kong, asegúrate de que el contenedor de Kong esté en ejecución y de que tu firewall no esté bloqueando el acceso a los puertos 8001 o 8444.
+*   **Fallo en las Solicitudes GraphQL:** Si las solicitudes GraphQL están fallando, asegúrate de que la dirección de `graphql-server` sea correcta, de que el plugin `graphql-proxy` esté habilitado y de que estés proporcionando una clave API válida (si `key-auth` está habilitado). Revisa los logs de Kong para obtener mensajes de error más específicos. También, asegúrate de que CORS esté configurado correctamente si estás haciendo solicitudes desde un navegador.
+
+## Información Adicional
+
+*   **Documentación de Kong:** [https://docs.konghq.com/](https://docs.konghq.com/)
+*   **Documentación de Docker:** [https://docs.docker.com/](https://docs.docker.com/)
+*   **Documentación de Docker Compose:** [https://docs.docker.com/compose/](https://docs.docker.com/compose/)
