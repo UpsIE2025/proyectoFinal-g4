@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { ApolloServer, gql } = require("apollo-server");
 const authenticate = require("./services/auth");
 const { callRestService } = require("./services/restService");
@@ -9,11 +10,10 @@ const typeDefs = gql`
   }
 
   input StudentInput {
+    id: Int
     nombre: String!
     apellido: String!
-    correo: String!
-    fecha_nacimiento: String
-    carrera: String
+    carrera: String!
     semestre: Int
   }
 

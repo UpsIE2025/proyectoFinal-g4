@@ -7,23 +7,8 @@ services:
     environment:
       - NODE_ENV=production
       - JWT_SECRET=mi_super_secreto
-      - REST_SERVICE_URL=http://rest-service:5000/api/data
+      - REST_SERVICE_URL=http://host.docker.internal:8080/kafka/send
       - GRPC_SERVICE_HOST=grpc-service:50051
-    # depends_on:
-    #   - db
-
-  # db:
-  #   image: postgres:15
-  #   container_name: postgres_db
-  #   restart: always
-  #   environment:
-  #     POSTGRES_USER: admin
-  #     POSTGRES_PASSWORD: admin
-  #     POSTGRES_DB: estudiantes
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - db-data:/var/lib/postgresql/data
 
 volumes:
   db-data:
