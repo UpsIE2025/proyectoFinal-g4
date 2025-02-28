@@ -17,19 +17,56 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     command: >
       bash -c "
       /etc/confluent/docker/run &
       sleep 10 &&
-      kafka-topics --create --if-not-exists --topic grupo4-topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1 &&
+      kafka-topics --create --if-not-exists --topic grupo4-topic --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
       wait
       "
     networks:
       - integration-network
-      
-      
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "kafka:9092"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+
+
+  producer:
+    build:
+      context: ./Task_3/producer
+      dockerfile: Dockerfile
+    container_name: producer_app
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - integration-network
+    depends_on:
+      kafka:
+        condition: service_healthy # Espera hasta que Kafka esté listo
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092 # Pasa la configuración correcta de Kafka
+
+  consumer:
+    build:
+      context: ./Task_3/consumer
+      dockerfile: Dockerfile
+    container_name: consumer_app
+    restart: always
+    ports:
+      - "8081:8081"
+    networks:
+      - integration-network
+    depends_on:
+      kafka:
+        condition: service_healthy # Espera hasta que Kafka esté listo
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092 # Pasa la configuración correcta de Kafka
+
 networks:
   integration-network:
     driver: bridge
