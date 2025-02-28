@@ -2,3 +2,4 @@ Flask
 grpcio>=1.70.0
 grpcio-tools>=1.70.0
 protobuf
+psycopg2
