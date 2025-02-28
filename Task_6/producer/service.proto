@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package service;
+service UserService {
+  rpc SendMessage(UserRequest) returns (Empty);
+  rpc ReceiveMessages(Empty) returns (stream ActionMessage);
+  rpc GetUser(UserIdRequest) returns (UserResponse);
+}
+
+message UserRequest {
+  int32 id = 1;
+  string nombre = 2;
+  string apellido = 3;
+  string correo = 4;
+  string fecha_nacimiento = 5;
+  string semestre = 6;
+  string action = 7;
+  string correlation_id = 8;  // nuevo campo para correlacionar solicitud y respuesta
+}
+
+message UserIdRequest {
+  int32 id = 1;
+}
+
+message UserResponse {
+  int32 id = 1;
+  string nombre = 2;
+  string apellido = 3;
+  string correo = 4;
+  string fecha_nacimiento = 5;
+  string semestre = 6;
+}
+message Empty {}
+
+message ActionMessage {
+  string action = 1;  // "create", "read", "update", "delete"
+  string correlation_id = 2;  // nuevo campo para correlacionar solicitud y respuesta
+  UserRequest data = 3;
+}
+
