@@ -70,8 +70,10 @@ def consume_kafka():
             after_data = payload.get("after", None)
 
             if op in ["c", "u"] and after_data:
-                parse_date = datetime(1970, 1, 1) + timedelta(days=after_data['fecha_nacimiento'])
-                after_data['fecha_nacimiento'] = parse_date
+                date_to_parse = after_data.get("fecha_nacimiento", None)
+                if date_to_parse:
+                    parse_date = datetime(1970, 1, 1) + timedelta(days=date_to_parse)
+                    after_data['fecha_nacimiento'] = parse_date
                 student = Students(**after_data)
                 save_student(student)
             elif op == "d" and before_data:
