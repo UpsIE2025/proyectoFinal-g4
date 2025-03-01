@@ -20,6 +20,7 @@ const callGrpcService = (studentData) => {
         console.error("Error en gRPC:", error.message);
         reject(new Error("Error en gRPC"));
       }
+      console.log(response);
       resolve(response);
     });
   });

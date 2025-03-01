@@ -15,7 +15,6 @@ const typeDefs = gql`
     nombre: String!
     apellido: String!
     correo: String!
-    fecha_nacimiento: String!
     semestre: String!
     action: String!
   }
@@ -46,7 +45,7 @@ const resolvers = {
         correlation_id: correlationId,
       };
 
-
+      
       const restResponse = await callRestService(restData);
 
       if (restResponse.status === 202) {
@@ -54,7 +53,7 @@ const resolvers = {
         const grpcResponse = await callGrpcService(grpcData);
 
         return {
-          message: `Guardado en REST y gRPC: ${grpcResponse.success}`,
+          message: `Guardado en REST y gRPC`,
           status: "OK",
         };
       }
