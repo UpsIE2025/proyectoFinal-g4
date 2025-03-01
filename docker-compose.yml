@@ -80,7 +80,7 @@ services:
       NODE_ENV: production
       JWT_SECRET: mi_super_secreto
       REST_SERVICE_URL: http://producer_app:8080/kafka/send
-      GRPC_SERVICE_HOST: grpc-service:50051
+      GRPC_SERVICE_HOST: grpc-server:50051
     depends_on:
       - producer
 

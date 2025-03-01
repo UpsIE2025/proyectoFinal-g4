@@ -3,6 +3,7 @@ const { ApolloServer, gql } = require("apollo-server");
 const authenticate = require("./services/auth");
 const { callRestService } = require("./services/restService");
 const { callGrpcService } = require("./services/grpcService");
+const { v4: uuidv4 } = require("uuid");
 
 const typeDefs = gql`
   type Query {
@@ -13,8 +14,10 @@ const typeDefs = gql`
     id: Int
     nombre: String!
     apellido: String!
-    carrera: String!
-    semestre: Int
+    correo: String!
+    fecha_nacimiento: String!
+    semestre: String!
+    action: String!
   }
 
   type Response {
@@ -28,12 +31,27 @@ const resolvers = {
     saveStudent: async (_, { input }, { token }) => {
       
       const user = await authenticate(token);
+      const correlationId = uuidv4();
 
-      const restResponse = await callRestService(input);
+      const restData = {
+        id: input.id,
+        nombre: input.nombre,
+        apellido: input.apellido,
+        carrera: input.carrera,
+        semestre: input.semestre,
+      };
+
+      const grpcData = {
+        ...input,
+        correlation_id: correlationId,
+      };
+
+
+      const restResponse = await callRestService(restData);
 
       if (restResponse.status === 202) {
 
-        const grpcResponse = await callGrpcService(input);
+        const grpcResponse = await callGrpcService(grpcData);
 
         return {
           message: `Guardado en REST y gRPC: ${grpcResponse.success}`,
