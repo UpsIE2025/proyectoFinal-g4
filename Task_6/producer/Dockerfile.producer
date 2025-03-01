@@ -5,7 +5,7 @@ FROM python:3.12
 WORKDIR /app
 
 # Copia los archivos de la aplicación
-COPY ./producer/ .
+COPY ./Task_6/producer/ .
 
 # Instala las dependencias
 RUN pip install --no-cache-dir -r requirements.txt
