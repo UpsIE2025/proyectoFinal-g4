@@ -25,6 +25,13 @@ const typeDefs = gql`
   }
 `;
 
+/**
+ * Resolvers for GraphQL queries and mutations.
+ *
+ * @typedef {Object} Resolvers
+ * @property {Object} Query - Resolvers for GraphQL queries.
+ * @property {Function} Query.saveStudent - Resolver for saving a student.
+ */
 const resolvers = {
   Query: {
     saveStudent: async (_, { input }, { token }) => {
