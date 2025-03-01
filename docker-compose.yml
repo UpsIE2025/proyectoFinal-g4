@@ -195,6 +195,12 @@ services:
       - "./Task_5/postgres_init.sql:/docker-entrypoint-initdb.d/10-init.sql"
     networks:
       - cdc_network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "change_data_capture", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
 
   zookeeper-cdc:
     image: quay.io/debezium/zookeeper:2.7
@@ -247,10 +253,44 @@ services:
       - cdc_network
   # END - CHANGE DATA CAPTURE
 
+  grpc-server:
+    build: 
+      context: .
+      dockerfile: ./Task_6/server/Dockerfile.server
+    ports:
+      - "50051:50051"
+    depends_on:
+      - postgres
+    networks:
+      - grpc-network
+
+  grpc-client:
+    build: 
+      context: .
+      dockerfile: ./Task_6/client/Dockerfile.client
+    depends_on:
+      - grpc-server
+      - postgres
+    networks:
+      - grpc-network
+
+  grpc-producer:
+    build: 
+      context: .
+      dockerfile: ./Task_6/producer/Dockerfile.producer
+    ports:
+      - "5000:5000"
+    depends_on:
+      - grpc-server
+    networks:
+      - grpc-network
+
 networks:
   integration-network:
     driver: bridge
   cdc_network:
+  grp-network:
+    driver: bridge
 
 volumes:
   kong-data:
