@@ -14,3 +14,8 @@ MariaDBSession = sessionmaker(bind=mariadb_engine)
 PostgreSQLSession = sessionmaker(bind=postgresql_engine)
 PostgresBase = declarative_base()
 
+def connect_to_databases():
+    """
+    Connects to the MariaDB and PostgreSQL databases using the provided URLs.
+    """
+    pass

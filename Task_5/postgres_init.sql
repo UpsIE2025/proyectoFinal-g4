@@ -1,3 +1,17 @@
+/*
+ * This SQL script creates a table called "estudiantes" and inserts some sample data into it.
+ * The "estudiantes" table has the following columns:
+ * - id: SERIAL PRIMARY KEY
+ * - nombre: VARCHAR(100) NOT NULL
+ * - apellido: VARCHAR(100) NOT NULL
+ * - correo: VARCHAR(150) NOT NULL
+ * - fecha_nacimiento: DATE
+ * - carrera: VARCHAR(100)
+ * - semestre: INT
+ *
+ * The script inserts five rows into the "estudiantes" table, each representing a different student.
+ * The sample data includes the student's name, last name, email, date of birth, major, and semester.
+ */
 CREATE TABLE estudiantes (
     id                  SERIAL PRIMARY KEY,
     nombre              VARCHAR(100) NOT NULL,
