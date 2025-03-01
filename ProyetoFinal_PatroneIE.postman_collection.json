@@ -1,0 +1,163 @@
+{
+	"info": {
+		"_postman_id": "1859a732-3198-420c-9620-bc666e075ae3",
+		"name": "ProyetoFinal_PatroneIE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19548691"
+	},
+	"item": [
+		{
+			"name": "Consumo GraphQL",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer CUALQUIER_TOKEN_O_NADA"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"query\": \"query { saveStudent(input: { id: 1, nombre: \\\"carlosA\\\", apellido: \\\"Rea\\\", correo: \\\"jrea@example.com\\\", fecha_nacimiento: \\\"\\\", semestre: \\\"2\\\", action: \\\"create\\\" }) { message status } }\"\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Consumo Rest",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"nombre\": \"carlos\",\n    \"apellido\": \"reimon\",\n    \"carrera\": \"Ambiental\",\n    \"semestre\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/kafka/send",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"kafka",
+						"send"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Consumo Grpc",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 2,\n    \"nombre\": \"josue\",\n    \"apellido\": \"rea\",\n    \"correo\": \"sd@gmail.com\",\n    \"fecha_nacimiento\": \"12/12/2025\",\n    \"semestre\": 2,\n    \"action\": \"create\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/enviar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"enviar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener Usuario Grpc",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/leer?id=1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"leer"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Consumo Conector",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"postgres-connector\",\r\n    \"config\": {\r\n        \"connector.class\": \"io.debezium.connector.postgresql.PostgresConnector\",\r\n        \"tasks.max\": \"1\",\r\n        \"database.hostname\": \"postgres\",\r\n        \"database.port\": \"5432\",\r\n        \"database.user\": \"postgres\",\r\n        \"database.password\": \"mypassword\",\r\n        \"database.dbname\": \"change_data_capture\",\r\n        \"topic.prefix\": \"dbserver1\",\r\n        \"plugin.name\": \"pgoutput\",\r\n        \"slot.name\": \"debezium_slot\",\r\n        \"publication.name\": \"debezium_pub\",\r\n        \"publication.autocreate.mode\": \"all_tables\",\r\n        \"include.schema.changes\": \"true\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/connectors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -4,6 +4,8 @@ import psycopg2
 sys.path.append("grpcgen")
 import service_pb2
 import service_pb2_grpc
+import time
+import datetime
 
 # Configuración de la base de datos
 DB_CONFIG = {
@@ -27,7 +29,7 @@ def process_message(message):
         with conn.cursor() as cursor:
             if action == "create":
                 cursor.execute("INSERT INTO estudiantes (nombre, apellido, correo, fecha_nacimiento, semestre) VALUES (%s, %s, %s, %s, %s) RETURNING id", 
-                               (data.nombre, data.apellido, data.correo, data.fecha_nacimiento, data.semestre))
+                               (data.nombre, data.apellido, data.correo, datetime.datetime.now().date(), data.semestre))
                 user_id = cursor.fetchone()[0]
                 print(f"User created with ID: {user_id}")
             elif action == "read":
