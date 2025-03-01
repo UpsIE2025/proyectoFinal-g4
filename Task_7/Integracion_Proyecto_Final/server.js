@@ -43,6 +43,7 @@ const resolvers = {
       const grpcData = {
         ...input,
         correlation_id: correlationId,
+        fecha_nacimiento: ""
       };
 
       
