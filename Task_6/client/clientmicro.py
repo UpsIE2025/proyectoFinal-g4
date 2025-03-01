@@ -7,10 +7,10 @@ import service_pb2_grpc
 
 # Configuración de la base de datos
 DB_CONFIG = {
-    "dbname": "proyectofinal",
+    "dbname": "change_data_capture ",
     "user": "postgres",
-    "password": "postgres",
-    "host": "db",
+    "password": "mypassword",
+    "host": "postgres",
     "port": "5432"
 }
 
