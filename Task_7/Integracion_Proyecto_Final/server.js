@@ -15,8 +15,8 @@ const typeDefs = gql`
     nombre: String!
     apellido: String!
     correo: String!
+    carrera: String!
     semestre: String!
-    action: String!
   }
 
   type Response {
@@ -37,13 +37,18 @@ const resolvers = {
         nombre: input.nombre,
         apellido: input.apellido,
         carrera: input.carrera,
-        semestre: input.semestre,
+        semestre: parseInt(input.semestre, 10)
       };
 
       const grpcData = {
-        ...input,
-        correlation_id: correlationId,
-        fecha_nacimiento: ""
+        id: input.id,
+        nombre: input.nombre,
+        apellido: input.apellido,
+        correo: input.correo,
+        fecha_nacimiento: "",
+        semestre: parseInt(input.semestre, 10),
+        action: "create",
+        correlation_id: correlationId
       };
 
       
@@ -54,13 +59,13 @@ const resolvers = {
         const grpcResponse = await callGrpcService(grpcData);
 
         return {
-          message: `Guardado en REST y gRPC`,
+          message: `Guardado en REST y gRPC: ${grpcResponse.status}`,
           status: "OK",
         };
       }
 
       return {
-        message: "Guardado solo en REST",
+        message: `Guardado solo en REST: ${restResponse.status}`,
         status: "OK",
       };
     },
