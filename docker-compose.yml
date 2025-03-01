@@ -179,7 +179,7 @@ services:
     volumes:
       - "./Task_5/mariadb_init.sql:/docker-entrypoint-initdb.d/1.sql"
     networks:
-      - cdc_network
+      - integration-network
 
   postgres:
     image: quay.io/debezium/postgres:15
@@ -194,7 +194,7 @@ services:
       - "./Task_5/postgresql.conf:/etc/postgresql/postgresql.conf"
       - "./Task_5/postgres_init.sql:/docker-entrypoint-initdb.d/10-init.sql"
     networks:
-      - cdc_network
+      - integration-network
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres", "-d", "change_data_capture", "-h", "localhost"]
       interval: 10s
@@ -205,7 +205,7 @@ services:
   zookeeper-cdc:
     image: quay.io/debezium/zookeeper:2.7
     networks:
-      - cdc_network
+      - integration-network
 
   kafka-cdc:
     image: quay.io/debezium/kafka:2.7
@@ -219,7 +219,7 @@ services:
       timeout: 5s
       retries: 10
     networks:
-      - cdc_network
+      - integration-network
 
   connect:
     image: quay.io/debezium/connect:2.7
@@ -235,7 +235,7 @@ services:
     depends_on:
       - kafka-cdc
     networks:
-      - cdc_network
+      - integration-network
 
   microservice:
     build:
@@ -250,7 +250,7 @@ services:
       kafka-cdc:
         condition: service_healthy
     networks:
-      - cdc_network
+      - integration-network
   # END - CHANGE DATA CAPTURE
 
   grpc-server:
@@ -262,7 +262,7 @@ services:
     depends_on:
       - postgres
     networks:
-      - grpc-network
+      - integration-network
 
   grpc-client:
     build: 
@@ -272,7 +272,7 @@ services:
       - grpc-server
       - postgres
     networks:
-      - grpc-network
+      - integration-network
 
   grpc-producer:
     build: 
@@ -283,13 +283,10 @@ services:
     depends_on:
       - grpc-server
     networks:
-      - grpc-network
+      - integration-network
 
 networks:
   integration-network:
-    driver: bridge
-  cdc_network:
-  grp-network:
     driver: bridge
 
 volumes:
