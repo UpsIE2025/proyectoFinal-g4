@@ -279,7 +279,7 @@ services:
       context: .
       dockerfile: ./Task_6/producer/Dockerfile.producer
     ports:
-      - "5000:5000"
+      - "5001:5000"
     depends_on:
       - grpc-server
     networks:

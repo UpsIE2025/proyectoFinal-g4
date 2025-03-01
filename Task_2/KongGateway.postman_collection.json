@@ -16,13 +16,13 @@
 				"header": [
 					{
 						"key": "apikey",
-						"value": "QcYeetZF2I73Vsjepu4aOp17uutfAx3Z",
+						"value": "MEbVArX7pIn1py1ZDZntDsJuli3nbBiA",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"query\": \"query { saveStudent(input: { id: 1, nombre: \\\"Juan\\\", apellido: \\\"Pérez\\\", carrera: \\\"Ingeniería en mecanica\\\", semestre: 2 }) { message status } }\"\n}",
+					"raw": "{\n    \"query\": \"query { saveStudent(input: { id: 1, nombre: \\\"Eduardo\\\", apellido: \\\"Shigui\\\", correo: \\\"kon@example.com\\\", semestre: \\\"2\\\", action: \\\"create\\\" }) { message status } }\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
