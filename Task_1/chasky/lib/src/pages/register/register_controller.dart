@@ -13,8 +13,6 @@ class RegisterController extends GetxController {
 
   TextEditingController nameController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController birthDateController = TextEditingController();
   TextEditingController careerController = TextEditingController();
   TextEditingController semesterController = TextEditingController();
 
@@ -26,40 +24,31 @@ class RegisterController extends GetxController {
   void register() async {
     String name = nameController.text;
     String lastname = lastnameController.text;
-    String email = emailController.text.trim();
-    String birthDate = birthDateController.text.trim();
     String career = careerController.text.trim();
     String semester = semesterController.text.trim();
 
-    print('Email ${email}');
+    print('name ${name}');
 
     if (isValidForm(
       name,
       lastname,
-      email,
-      birthDate,
       career,
       semester,
     )) {
       User user = User(
         name: name,
         lastname: lastname,
-        email: email,
-        birthDate: birthDate,
         career: career,
         semester: int.parse(semester),
       );
 
       Stream stream = await usersProvider.createWithImage(user, imageFile!);
       stream.listen((res) {
+        print('name ${res}');
         ResponseApi responseApi = ResponseApi.fromJson(json.decode(res));
 
         if (responseApi.success == true) {
-          GetStorage().write(
-            'user',
-            responseApi.data,
-          ); // DATOS DEL USUARIO EN SESION
-          goToHomePage();
+          Get.snackbar('Registro OK', responseApi.message ?? '');
         } else {
           Get.snackbar('Registro fallido', responseApi.message ?? '');
         }
@@ -74,20 +63,10 @@ class RegisterController extends GetxController {
   bool isValidForm(
     String name,
     String lastname,
-    String email,
-    String birthDate,
     String career,
     String semester,
   ) {
-    if (email.isEmpty) {
-      Get.snackbar('Formulario no valido', 'Debes ingresar el email');
-      return false;
-    }
 
-    if (!GetUtils.isEmail(email)) {
-      Get.snackbar('Formulario no valido', 'El email no es valido');
-      return false;
-    }
 
     if (name.isEmpty) {
       Get.snackbar('Formulario no valido', 'Debes ingresar tu nombre');
@@ -99,13 +78,6 @@ class RegisterController extends GetxController {
       return false;
     }
 
-    if (birthDate.isEmpty) {
-      Get.snackbar(
-        'Formulario no valido',
-        'Debes ingresar tu fecha de nacimiento',
-      );
-      return false;
-    }
 
     if (career.isEmpty) {
       Get.snackbar('Formulario no valido', 'Debes ingresar tu carrera');

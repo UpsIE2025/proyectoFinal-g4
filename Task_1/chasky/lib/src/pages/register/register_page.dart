@@ -64,8 +64,6 @@ class RegisterPage extends StatelessWidget {
             _textYourInfo(),
             _textFieldName(),
             _textFieldLastName(),
-            _textFieldEmail(),
-            _textFieldBirthDate(),
             _textFieldCareer(),
             _textFieldSemester(),
             _buttonRegister(),
@@ -75,19 +73,7 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  Widget _textFieldEmail() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 40),
-      child: TextField(
-        controller: con.emailController,
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-          hintText: 'Correo electronico',
-          prefixIcon: Icon(Icons.email),
-        ),
-      ),
-    );
-  }
+
 
   Widget _textFieldName() {
     return Container(
@@ -117,19 +103,7 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  Widget _textFieldBirthDate() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 40),
-      child: TextField(
-        controller: con.birthDateController,
-        keyboardType: TextInputType.datetime,
-        decoration: InputDecoration(
-          hintText: 'Fecha de Nacimiento',
-          prefixIcon: Icon(Icons.calendar_today),
-        ),
-      ),
-    );
-  }
+
 
   Widget _textFieldCareer() {
     return Container(

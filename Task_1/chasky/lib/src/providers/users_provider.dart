@@ -20,20 +20,48 @@ class UsersProvider extends GetConnect {
     return response;
   }
 
-  Future<Stream> createWithImage(User user, File image) async {
-    Uri uri = Uri.http(Environment.API_URL_OLD, '/api/users/createWithImage');
-    final request = http.MultipartRequest('POST', uri);
-    request.files.add(
-      http.MultipartFile(
-        'image',
-        http.ByteStream(image.openRead().cast()),
-        await image.length(),
-        filename: basename(image.path),
-      ),
+  Future<Stream<String>> createWithImage(User user, File image) async {
+    final url = Environment.API_GATEWAY;
+    final headers = {
+      'apikey': '0f59mIgD5HKu9XSut5Q6cSTt84qjVcls',
+      'Content-Type': 'application/json',
+    };
+    final body = json.encode({
+      'query': '''
+        query {
+          saveStudent(input: {
+            id: 1,
+            nombre: "${user.name}",
+            apellido: "${user.lastname}",
+            carrera: "${user.career}",
+            semestre: ${user.semester}
+          }) {
+            message
+            status
+          }
+        }
+      ''',
+    });
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: body,
     );
-    request.fields['user'] = json.encode(user);
-    final response = await request.send();
-    return response.stream.transform(utf8.decoder);
+
+    // Use logging framework instead of print
+    Get.log('Response status: ${response.statusCode}');
+    Get.log('Response body: ${response.body}');
+
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      if (responseBody['errors'] != null) {
+        return Stream.value('Error: ${responseBody['errors'][0]['message']}');
+      }
+      return Stream.value(response.body);
+    } else {
+      return Stream.value('Error: ${response.reasonPhrase}');
+    }
   }
 
   /*
