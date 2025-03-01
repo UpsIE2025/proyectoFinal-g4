@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  flutter_android_builder:
+    build: .
+    container_name: flutter_android_builder
+    volumes:
+      - .:/app
+    command: flutter build apk

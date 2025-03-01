@@ -23,7 +23,7 @@ class UsersProvider extends GetConnect {
   Future<Stream<String>> createWithImage(User user, File image) async {
     final url = Environment.API_GATEWAY;
     final headers = {
-      'apikey': '0f59mIgD5HKu9XSut5Q6cSTt84qjVcls',
+      'apikey': "${Environment.TOKEN}",
       'Content-Type': 'application/json',
     };
     final body = json.encode({
