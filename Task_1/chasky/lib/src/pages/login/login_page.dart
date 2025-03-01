@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:chasky/src/pages/login/login_controller.dart';
+//import 'package:chasky/src/providers/auth_service.backup';
 
 class LoginPage extends StatelessWidget {
   LoginController con = Get.put(LoginController());
+  //AuthService authService =      AuthService(); // Instancia del servicio de autenticación
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Container(height: 50, child: _textDontHaveAccount()),
       body: Stack(
-        // POSICIONAR ELEMENTOS UNO ENCIMA DEL OTRO
         children: [
           _backgroundCover(context),
           _boxForm(context),
-          Column(
-            // POSICIONAR ELEMENTOS UNO DEBAJO DEL OTRO (VERTICAL)
-            children: [_imageCover(), _textAppName()],
-          ),
+          Column(children: [_imageCover(), _textAppName()]),
         ],
       ),
     );
@@ -44,7 +42,7 @@ class LoginPage extends StatelessWidget {
 
   Widget _boxForm(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.45,
+      height: MediaQuery.of(context).size.height * 0.55,
       margin: EdgeInsets.only(
         top: MediaQuery.of(context).size.height * 0.35,
         left: 50,
@@ -67,6 +65,7 @@ class LoginPage extends StatelessWidget {
             _textFieldEmail(),
             _textFieldPassword(),
             _buttonLogin(),
+            //_buttonLoginWithAuth0(), // Nuevo botón para Auth0
           ],
         ),
       ),
@@ -105,7 +104,7 @@ class LoginPage extends StatelessWidget {
   Widget _buttonLogin() {
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+      margin: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
       child: ElevatedButton(
         onPressed: () => con.login(),
         style: ElevatedButton.styleFrom(
@@ -116,11 +115,52 @@ class LoginPage extends StatelessWidget {
     );
   }
 
+  /* 🔹 NUEVO BOTÓN PARA LOGIN CON AUTH0
+  Widget _buttonLoginWithAuth0() {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+      child: ElevatedButton(
+        onPressed: () async {
+          final user = await authService.loginWithAuth0();
+          if (user != null) {
+            Get.snackbar(
+              "Bienvenido",
+              "Inicio de sesión exitoso",
+              snackPosition: SnackPosition.BOTTOM,
+            );
+          } else {
+            Get.snackbar(
+              "Error",
+              "No se pudo iniciar sesión",
+              snackPosition: SnackPosition.BOTTOM,
+            );
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blue, // Color del botón
+          padding: EdgeInsets.symmetric(vertical: 15),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.lock_open, color: Colors.white),
+            SizedBox(width: 10),
+            Text(
+              'Iniciar sesión con Auth0',
+              style: TextStyle(color: Colors.white),
+            ),
+          ],
+        ),
+      ),
+    );
+  } */
+
   Widget _textYourInfo() {
     return Container(
-      margin: EdgeInsets.only(top: 40, bottom: 45),
+      margin: EdgeInsets.only(top: 40, bottom: 30),
       child: Text(
-        'INGRESA ESTA INFORMACION',
+        'INGRESA ESTA INFORMACIÓN',
         style: TextStyle(color: Colors.black),
       ),
     );
@@ -128,7 +168,6 @@ class LoginPage extends StatelessWidget {
 
   Widget _textDontHaveAccount() {
     return Row(
-      // UBICAR ELEMENTOS UNO AL LADO DEL OTRO (HORIZONTAL)
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
@@ -139,7 +178,7 @@ class LoginPage extends StatelessWidget {
         GestureDetector(
           onTap: () => con.goToRegisterPage(),
           child: Text(
-            'Registrate Aqui',
+            'Regístrate aquí',
             style: TextStyle(
               color: Colors.amber,
               fontWeight: FontWeight.bold,
@@ -151,7 +190,6 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  // PRIVADO
   Widget _imageCover() {
     return SafeArea(
       child: Container(

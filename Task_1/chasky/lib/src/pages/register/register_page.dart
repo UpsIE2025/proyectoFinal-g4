@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:chasky/src/pages/register/register_controller.dart';
+import 'package:flutter/services.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterController con = Get.put(RegisterController());
@@ -73,14 +74,15 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-
-
   Widget _textFieldName() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 40),
       child: TextField(
         controller: con.nameController,
         keyboardType: TextInputType.text,
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+        ],
         decoration: InputDecoration(
           hintText: 'Nombre',
           prefixIcon: Icon(Icons.person),
@@ -95,6 +97,9 @@ class RegisterPage extends StatelessWidget {
       child: TextField(
         controller: con.lastnameController,
         keyboardType: TextInputType.text,
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+        ],
         decoration: InputDecoration(
           hintText: 'Apellido',
           prefixIcon: Icon(Icons.person_outline),
@@ -103,16 +108,17 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-
-
   Widget _textFieldCareer() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 40),
       child: TextField(
         controller: con.careerController,
         keyboardType: TextInputType.text,
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z@.-_]')),
+        ],
         decoration: InputDecoration(
-          hintText: 'Carrera',
+          hintText: 'Correo',
           prefixIcon: Icon(Icons.school),
         ),
       ),
@@ -125,6 +131,7 @@ class RegisterPage extends StatelessWidget {
       child: TextField(
         controller: con.semesterController,
         keyboardType: TextInputType.number,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         decoration: InputDecoration(
           hintText: 'Semestre',
           prefixIcon: Icon(Icons.calendar_view_day),
@@ -132,8 +139,6 @@ class RegisterPage extends StatelessWidget {
       ),
     );
   }
-
-
 
   Widget _buttonRegister() {
     return Container(

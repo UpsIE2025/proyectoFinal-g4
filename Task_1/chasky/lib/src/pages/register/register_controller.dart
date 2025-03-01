@@ -10,7 +10,6 @@ import 'package:chasky/src/models/user.dart';
 import 'package:chasky/src/providers/users_provider.dart';
 
 class RegisterController extends GetxController {
-
   TextEditingController nameController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
   TextEditingController careerController = TextEditingController();
@@ -29,12 +28,7 @@ class RegisterController extends GetxController {
 
     print('name ${name}');
 
-    if (isValidForm(
-      name,
-      lastname,
-      career,
-      semester,
-    )) {
+    if (isValidForm(name, lastname, career, semester)) {
       User user = User(
         name: name,
         lastname: lastname,
@@ -48,6 +42,7 @@ class RegisterController extends GetxController {
         ResponseApi responseApi = ResponseApi.fromJson(json.decode(res));
 
         if (responseApi.success == true) {
+          goToHomePage();
           Get.snackbar('Registro OK', responseApi.message ?? '');
         } else {
           Get.snackbar('Registro fallido', responseApi.message ?? '');
@@ -57,7 +52,7 @@ class RegisterController extends GetxController {
   }
 
   void goToHomePage() {
-    Get.offNamedUntil('/home', (route) => false);
+    Get.offNamedUntil('/', (route) => false);
   }
 
   bool isValidForm(
@@ -66,8 +61,6 @@ class RegisterController extends GetxController {
     String career,
     String semester,
   ) {
-
-
     if (name.isEmpty) {
       Get.snackbar('Formulario no valido', 'Debes ingresar tu nombre');
       return false;
@@ -77,7 +70,6 @@ class RegisterController extends GetxController {
       Get.snackbar('Formulario no valido', 'Debes ingresar tu apellido');
       return false;
     }
-
 
     if (career.isEmpty) {
       Get.snackbar('Formulario no valido', 'Debes ingresar tu carrera');

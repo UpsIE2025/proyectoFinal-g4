@@ -1,0 +1,22 @@
+import 'package:auth0_flutter/auth0_flutter.dart';
+
+class AuthService {
+  final auth0 = Auth0(
+    'dev-40tn73slaq38gt8j.us.auth0.com',
+    '4CeU69WWcIc4kDDNnJZap39r1Tofjwqs',
+  );
+
+  Future<UserProfile?> loginWithAuth0() async {
+    try {
+      final credentials = await auth0.webAuthentication().login();
+      return credentials.user;
+    } catch (e) {
+      print("Error al iniciar sesión con Auth0: $e");
+      return null;
+    }
+  }
+
+  Future<void> logout() async {
+    await auth0.webAuthentication().logout();
+  }
+}

@@ -33,8 +33,9 @@ class UsersProvider extends GetConnect {
             id: 1,
             nombre: "${user.name}",
             apellido: "${user.lastname}",
-            carrera: "${user.career}",
-            semestre: ${user.semester}
+            correo: "${user.career}",
+            semestre: "${user.semester}",
+            action: "create"
           }) {
             message
             status
