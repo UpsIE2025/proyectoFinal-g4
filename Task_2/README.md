@@ -57,22 +57,9 @@ Al implementar Kong o Apache APISIX en producción, considera los siguientes asp
 *   **Gestión de la Configuración:** Utiliza herramientas de gestión de la configuración para simplificar el despliegue y las actualizaciones.
 *   **Pruebas:** Realiza pruebas exhaustivas antes de lanzar a producción para garantizar la estabilidad.
 
-## Repositorio de Ejemplo
-
-(Aquí debes agregar un enlace a tu repositorio con el ejemplo práctico)
-
-El repositorio incluye ejemplos de instalación, configuración, creación de APIs protegidas con autenticación y pruebas funcionales.
-
 ## Conclusión
 
 Tanto Kong como Apache APISIX son excelentes opciones como API Gateway.  La elección entre uno u otro dependerá de los requisitos específicos del proyecto, la experiencia del equipo y las prioridades de la organización.
-
-
-
-
-
-
-
 
 # Kong Gateway - Guía de Instalación y Configuración
 
