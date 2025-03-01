@@ -12,6 +12,37 @@ from app.repository import save_student, delete_student_id
 
 
 def consume_kafka():
+    """
+    Consume messages from a Kafka topic and perform actions based on the received events.
+
+    This function connects to a Kafka cluster, subscribes to a specific topic, and consumes messages from it.
+    It processes the events received and performs different actions based on the event type and data.
+
+    The function expects the following environment variable to be set:
+    - KAFKA_URL: The URL of the Kafka cluster to connect to.
+
+    The function uses the following parameters for consuming messages:
+    - topic: The name of the Kafka topic to subscribe to.
+    - bootstrap_servers: The list of Kafka broker URLs to bootstrap the connection.
+    - auto_offset_reset: The strategy to use when there is no initial offset in Kafka or if the current offset does not exist.
+    - enable_auto_commit: Whether to automatically commit the consumed offsets.
+    - group_id: The consumer group ID to join.
+    - value_deserializer: The deserializer function to use for deserializing the message values.
+    - key_deserializer: The deserializer function to use for deserializing the message keys.
+
+    The function processes the received messages and performs the following actions:
+    - For events with operation "c" (create) or "u" (update), it parses the date of birth and saves the student data.
+    - For events with operation "d" (delete), it deletes the student data based on the ID.
+
+    If the event operation is not recognized, it prints "Another event".
+
+    If any error occurs during the consumption process, it prints the error message.
+
+    Note: This function assumes the existence of the following helper functions:
+    - save_student: A function to save the student data.
+    - delete_student_id: A function to delete the student data based on the ID.
+    """
+
     kafka_url = os.environ.get('KAFKA_URL')
     topic = "dbserver1.public.estudiantes"
     try:

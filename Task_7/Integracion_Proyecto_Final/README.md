@@ -19,9 +19,9 @@ docker-compose up --build
 ## Curl
 curl --location 'http://localhost:4000/' \
 --header 'Content-Type: application/json' \
---header 'Authorization: Bearer TU_TOKEN_JWT' \
---data '{
-    "query": "query { saveStudent(input: { id: 1, nombre: \"Juan\", apellido: \"Pérez\", carrera: \"Ingeniería en mecanica\", semestre: 2 }) { message status } }"
+--header 'Authorization: Bearer CUALQUIER_TOKEN_O_NADA' \
+--data-raw '{
+    "query": "query { saveStudent(input: { id: 1, nombre: \"Luis\", apellido: \"Pérez\", correo: \"juan@example.com\", fecha_nacimiento: \"2000-05-20\", semestre: \"2\", action: \"create\" }) { message status } }"
   }'
 
 ---

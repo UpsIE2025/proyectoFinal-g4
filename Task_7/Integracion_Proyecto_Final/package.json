@@ -17,6 +17,8 @@
     "axios": "^1.8.1",
     "dotenv": "^16.4.7",
     "graphql": "^16.10.0",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "path": "^0.12.7",
+    "uuid": "^11.1.0"
   }
 }

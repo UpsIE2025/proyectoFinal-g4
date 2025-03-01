@@ -7,10 +7,10 @@ import service_pb2_grpc
 
 # Configuración de la base de datos
 DB_CONFIG = {
-    "dbname": "proyectofinal",
+    "dbname": "change_data_capture",
     "user": "postgres",
-    "password": "postgres",
-    "host": "db",
+    "password": "mypassword",
+    "host": "postgres",
     "port": "5432"
 }
 
@@ -26,7 +26,7 @@ def process_message(message):
     with connect_db() as conn:
         with conn.cursor() as cursor:
             if action == "create":
-                cursor.execute("INSERT INTO estudiante (nombre, apellido, correo, fecha_nacimiento, semestre) VALUES (%s, %s, %s, %s, %s) RETURNING id", 
+                cursor.execute("INSERT INTO estudiantes (nombre, apellido, correo, fecha_nacimiento, semestre) VALUES (%s, %s, %s, %s, %s) RETURNING id", 
                                (data.nombre, data.apellido, data.correo, data.fecha_nacimiento, data.semestre))
                 user_id = cursor.fetchone()[0]
                 print(f"User created with ID: {user_id}")
@@ -35,7 +35,7 @@ def process_message(message):
                 corr_id = data.correlation_id
                 user_id = data.id
                 print(f"Procesando read para id {user_id} con correlación {corr_id}")
-                cursor.execute("SELECT * FROM estudiante WHERE id = %s", (user_id,))
+                cursor.execute("SELECT * FROM estudiantes WHERE id = %s", (user_id,))
                 user = cursor.fetchone()
                 if user:
                     print(f"User found: {user}")
@@ -70,11 +70,11 @@ def process_message(message):
                 stub.SendMessage(response_msg)
                 print("Respuesta enviada para correlación", corr_id)
             elif action == "update":
-                cursor.execute("UPDATE estudiante SET nombre = %s, apellido = %s, correo = %s, fecha_nacimiento = %s, semestre = %s WHERE id = %s", 
+                cursor.execute("UPDATE estudiantes SET nombre = %s, apellido = %s, correo = %s, fecha_nacimiento = %s, semestre = %s WHERE id = %s", 
                                (data.nombre, data.apellido, data.correo, data.fecha_nacimiento, data.semestre, data.id))
                 print("User updated successfully")
             elif action == "delete":
-                cursor.execute("DELETE FROM estudiante WHERE id = %s", (data.id,))
+                cursor.execute("DELETE FROM estudiantes WHERE id = %s", (data.id,))
                 print("User deleted successfully")
             conn.commit()
 
